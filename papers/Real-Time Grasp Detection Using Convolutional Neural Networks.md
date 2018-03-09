@@ -50,6 +50,6 @@ Accuracy definition
 
 
 <img src="images/Real_Time_Grasp_Detection_Using_Convolutional_Neural_Networks/05-acc.png" width="1000">
-<img src="images/Real_Time_Grasp_Detection_Using_Convolutional_Neural_Networks/06-comparison.png" width="900">
+<img src="images/Real_Time_Grasp_Detection_Using_Convolutional_Neural_Networks/06-comparison.png" width="500">
 
 <img src="images/Real_Time_Grasp_Detection_Using_Convolutional_Neural_Networks/07-result.png" width="900">
