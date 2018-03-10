@@ -1,5 +1,5 @@
 
-# Paper name [You Only Look Once: Unified, Real-Time Object Detection](https://pjreddie.com/media/files/papers/yolo_1.pdf)
+# Paper name: [You Only Look Once: Unified, Real-Time Object Detection](https://pjreddie.com/media/files/papers/yolo_1.pdf)
 
 **Abstract**
 
@@ -83,3 +83,47 @@ also how accurate it thinks the box is that it predicts.
 
 **The Architecture**
 <p align="center"><img src="images/YOLO1/fig4.png" width="800"></p>
+Detection often requires fine-grained visual information
+so we increase the input resolution of the network
+from 224 × 224 to 448 × 448.
+Our final layer predicts both class probabilities and
+bounding box coordinates. We normalize the bounding box
+width and height by the image width and height so that they
+fall between 0 and 1. We parametrize the bounding box x
+and y coordinates to be offsets of a particular grid cell location
+so they are also bounded between 0 and 1.
+We use a linear activation function for the final layer and
+all other layers use the following leaky rectified linear activation:
+φ(x) = {{
+x, if x > 0
+0.1x, otherwise
+We optimize for sum-squared error in the output of our model.We use sum-squared error because it is easy to optimize,
+<b style='color:red'>however it does not perfectly align with our goal of
+maximizing average precision. It weights localization error
+equally with classification error which may not be ideal.</b>
+Also, in every image many grid cells do not contain any
+object. **This pushes the “confidence” scores of those cells
+towards zero**, often overpowering the gradient from cells
+that do contain objects. This can lead to model instability,
+causing training to diverge early on.
+Sum-squared error also equally weights errors in large
+boxes and small boxes. Our error metric should reflect that
+small deviations in large boxes matter less than in small
+boxes. <b style='color:red'>To partially address this we predict the square root
+of the bounding box width and height instead of the width
+and height directly.</b>
+
+
+YOLO predicts multiple bounding boxes per grid cell.
+At training time we only want one bounding box predictor
+to be responsible for each object. We assign one predictor
+to be “responsible” for predicting an object based on which
+prediction has the highest current IOU with the ground
+truth. This leads to specialization between the bounding box
+predictors. Each predictor gets better at predicting certain
+sizes, aspect ratios, or classes of object, improving overall
+recall.
+During training we optimize the following, multi-part loss function:
+
+
+<p align="center"><img src="images/YOLO1/fig5.png" width="400"></p>
